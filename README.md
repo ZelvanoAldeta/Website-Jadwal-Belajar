@@ -126,7 +126,7 @@
 
 <script>
     // Load data saat halaman dibuka
-    document.addEventListener('DOMContentLoaded', tampilkanJadwal);
+    document.addEventListener('DOMContentLoaded', TampilkanJadwal);
 
     function tambahJadwal() {
         const hari = document.getElementById('inputHari').value;
