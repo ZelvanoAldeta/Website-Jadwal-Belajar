@@ -1,181 +1,193 @@
-
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Belajar Whibie Aldyansyah S.</title>
+    <title>Sistem Jadwal Whibie Aldyansyah S.</title>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            color: #333;
         }
-        
-        .header-card {
-            background: #2c3e50;
-            color: white;
+        .container {
             width: 100%;
-            max-width: 900px;
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .header-card h1 { margin: 0; font-size: 24px; }
-        .header-card p { margin: 5px 0 0; opacity: 0.9; font-size: 18px; }
-
-        /* Gaya Tabel */
-        .table-container {
-            width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background: white;
-            padding: 20px;
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        th, td {
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #3498db;
+        .header {
+            background: var(--primary);
             color: white;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-
-        tr:nth-child(even) { background-color: #f8f9fa; }
-        tr:hover { background-color: #ebf5fb; transition: 0.3s; }
-
-        .jam { font-weight: bold; color: #2c3e50; background: #f1f1f1; }
-
-        /* Gaya Pencarian Interaktif */
-        .search-box {
-            margin-top: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 30px;
             text-align: center;
-            width: 100%;
-            max-width: 400px;
         }
+        .header h1 { margin: 0; font-size: 24px; }
+        .header p { margin: 5px 0 0; opacity: 0.8; }
 
-        input {
+        /* Form Input Section */
+        .admin-panel {
+            padding: 20px;
+            background: #ecf0f1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            border-bottom: 2px solid #ddd;
+        }
+        input, select {
             padding: 10px;
-            width: 70%;
-            border: 2px solid #ddd;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            outline: none;
         }
-
-        button {
+        .btn {
             padding: 10px 20px;
-            background-color: #27ae60;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            color: white;
+            transition: 0.3s;
         }
+        .btn-add { background: var(--success); }
+        .btn-add:hover { background: #219150; }
+        .btn-clear { background: var(--danger); }
 
-        button:hover { background-color: #219150; }
-
-        #hasilPencarian {
-            margin-top: 15px;
+        /* Table Style */
+        .table-section { padding: 20px; overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+        }
+        th { background: var(--accent); color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .delete-row {
+            color: var(--danger);
+            cursor: pointer;
             font-weight: bold;
-            color: #2980b9;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-card">
+<div class="container">
+    <div class="header">
         <h1>Jadwal Belajar Whibie Aldyansyah S.</h1>
-        <p>Kelas: 11 TJKT</p>
+        <p>Kelas: 11 TJKT | Manajemen Jadwal Mandiri</p>
     </div>
 
-    <div class="table-container">
-        <table>
+    <div class="admin-panel">
+        <select id="inputHari">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+        </select>
+        <input type="text" id="inputJam" placeholder="Contoh: 07:30 - 09:00">
+        <input type="text" id="inputMapel" placeholder="Nama Mata Pelajaran">
+        <button class="btn btn-add" onclick="tambahJadwal()">Tambah Jadwal</button>
+        <button class="btn btn-clear" onclick="resetJadwal()">Reset Semua</button>
+    </div>
+
+    <div class="table-section">
+        <table id="tabelJadwal">
             <thead>
                 <tr>
+                    <th>Hari</th>
                     <th>Waktu</th>
-                    <th>Senin</th>
-                    <th>Selasa</th>
-                    <th>Rabu</th>
-                    <th>Kamis</th>
-                    <th>Jumat</th>
+                    <th>Mata Pelajaran</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="jam">07:30 - 09:00</td>
-                    <td>AIJ (Infrastruktur)</td>
-                    <td>ASJ (Sistem)</td>
-                    <td>Matematika</td>
-                    <td>Bahasa Inggris</td>
-                    <td>TLJ (Layanan)</td>
-                </tr>
-                <tr>
-                    <td class="jam">09:15 - 10:45</td>
-                    <td>Keamanan Jaringan</td>
-                    <td>WAN (Jaringan Luas)</td>
-                    <td>Bahasa Indonesia</td>
-                    <td>Pendidikan Agama</td>
-                    <td>PKK (Produk Kreatif)</td>
-                </tr>
-            </tbody>
+            <tbody id="bodyJadwal">
+                </tbody>
         </table>
     </div>
+</div>
 
-    <div class="search-box">
-        <h3>Cek Mapel Hari Ini</h3>
-        <input type="text" id="hariInput" placeholder="Ketik hari (ex: Senin)">
-        <button onclick="cariJadwal()">Cek</button>
-        <div id="hasilPencarian"></div>
-    </div>
+<script>
+    // Load data saat halaman dibuka
+    document.addEventListener('DOMContentLoaded', tampilkanJadwal);
 
-    <script>
-        const jadwalData = {
-            "Senin": "AIJ (Infrastruktur) & Keamanan Jaringan",
-            "Selasa": "ASJ (Sistem) & WAN (Jaringan Luas)",
-            "Rabu": "Matematika & Bahasa Indonesia",
-            "Kamis": "Bahasa Inggris & Pendidikan Agama",
-            "Jumat": "TLJ (Layanan) & PKK (Produk Kreatif)"
-        };
+    function tambahJadwal() {
+        const hari = document.getElementById('inputHari').value;
+        const jam = document.getElementById('inputJam').value;
+        const mapel = document.getElementById('inputMapel').value;
 
-        function cariJadwal() {
-            const input = document.getElementById('hariInput').value.trim();
-            const hasil = document.getElementById('hasilPencarian');
-            
-            // Ubah input jadi huruf depan besar
-            const formatHari = input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
-
-            if (jadwalData[formatHari]) {
-                hasil.innerHTML = `Mata Pelajaran: ${jadwalData[formatHari]}`;
-                hasil.style.color = "#2980b9";
-            } else {
-                hasil.innerHTML = "Hari tidak ditemukan!";
-                hasil.style.color = "#e74c3c";
-            }
+        if (jam === "" || mapel === "") {
+            alert("Harap isi jam dan mata pelajaran!");
+            return;
         }
-    </script>
+
+        const jadwalBaru = { hari, jam, mapel };
+        
+        // Ambil data lama dari LocalStorage
+        let listJadwal = JSON.parse(localStorage.getItem('jadwalWhibie')) || [];
+        listJadwal.push(jadwalBaru);
+        
+        // Simpan kembali
+        localStorage.setItem('jadwalWhibie', JSON.stringify(listJadwal));
+        
+        // Reset form dan refresh tabel
+        document.getElementById('inputJam').value = "";
+        document.getElementById('inputMapel').value = "";
+        tampilkanJadwal();
+    }
+
+    function tampilkanJadwal() {
+        const tbody = document.getElementById('bodyJadwal');
+        tbody.innerHTML = "";
+        
+        let listJadwal = JSON.parse(localStorage.getItem('jadwalWhibie')) || [];
+
+        // Urutkan berdasarkan hari (opsional)
+        const urutanHari = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+        listJadwal.sort((a, b) => urutanHari.indexOf(a.hari) - urutanHari.indexOf(b.hari));
+
+        listJadwal.forEach((item, index) => {
+            let row = `<tr>
+                <td>${item.hari}</td>
+                <td>${item.jam}</td>
+                <td>${item.mapel}</td>
+                <td class="delete-row" onclick="hapusBaris(${index})">Hapus</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+
+    function hapusBaris(index) {
+        let listJadwal = JSON.parse(localStorage.getItem('jadwalWhibie'));
+        listJadwal.splice(index, 1);
+        localStorage.setItem('jadwalWhibie', JSON.stringify(listJadwal));
+        tampilkanJadwal();
+    }
+
+    function resetJadwal() {
+        if (confirm("Apakah Anda yakin ingin menghapus SEMUA jadwal?")) {
+            localStorage.removeItem('jadwalWhibie');
+            tampilkanJadwal();
+        }
+    }
+</script>
 
 </body>
-</html># Website-Jadwal-Belajar
-Web Whibie Aldyansyah S.
+</html>
